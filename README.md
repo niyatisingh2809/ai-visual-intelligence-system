@@ -1,58 +1,112 @@
----
-title: Image Captioning with Salesforce BLIP-2
-emoji: 🎨
-colorFrom: indigo
-colorTo: purple
-sdk: docker
-app_port: 7860
----
+# 🎨 AI Visual Intelligence System
 
-# Image Captioning with Salesforce BLIP-2
+An AI-powered visual understanding application that analyzes uploaded images using image captioning, object detection, facial-expression estimation, scene analysis, and grounded creative storytelling.
 
-The project/folder name is **Image Captioning with Salesforce BLIP-2**. The app heading remains **AI Visual Intelligence System**.
+## 🚀 Live Demo
 
-The current main app preserves the uploaded project's BLIP-base caption model, YOLOv8n, FLAN-T5-base and DeepFace. The separate original `app_blip2_backup.py` uses Salesforce BLIP-2 OPT-2.7B for captions, questions and audio. Naming the project does not switch the main model.
+**Render:** https://ai-visual-intelligence-system.onrender.com
 
-## Run locally
+> The first request can take longer because the service may need to wake up and load/download ML models.
 
-Use a fresh Python 3.11 environment. Open a terminal inside this folder:
+## ✨ Features
 
-```sh
+- **Automatic Image Captioning** using Salesforce BLIP
+- **Object Detection** using YOLOv8
+- **Human Facial-Expression Estimation** using DeepFace
+- **Environment / Scene Estimation** with conservative visual reasoning
+- **Deep Scene Description** combining caption, detected objects, lighting, setting, and expression output
+- **Creative Story Generation** using FLAN-T5 with a grounded fallback story system
+- **Interactive Gradio UI** with image upload and structured outputs
+
+## 🧠 Tech Stack
+
+**Language:** Python  
+**UI:** Gradio  
+**API / App Layer:** FastAPI  
+**Image Captioning:** Salesforce BLIP  
+**Object Detection:** Ultralytics YOLOv8  
+**Facial Analysis:** DeepFace, OpenCV  
+**Text Generation:** Google FLAN-T5  
+**ML Frameworks:** PyTorch, TensorFlow  
+**Deployment:** Render  
+**Version Control:** Git, GitHub
+
+## 🔍 How It Works
+
+1. The user uploads an image.
+2. BLIP generates an image caption.
+3. YOLOv8 detects visible objects and identifies person regions.
+4. If a clear human face is detected, DeepFace estimates the facial expression.
+5. The app estimates the visual environment without claiming an exact location when evidence is weak.
+6. A structured scene description is generated from the available visual evidence.
+7. FLAN-T5 attempts to generate a short image-grounded story. If the result is too short or poorly grounded, the app uses a deterministic fallback story.
+
+## ⚠️ Important Note
+
+Facial-expression output is an automated visual estimate only. It should not be treated as a person's confirmed emotional state.
+
+The environment output is also intentionally conservative and avoids claiming an exact real-world location unless the image provides sufficient visual evidence.
+
+## 💻 Run Locally
+
+Use Python 3.11.
+
+```bash
+git clone https://github.com/niyatisingh2809/ai-visual-intelligence-system.git
+cd ai-visual-intelligence-system
+
 python3.11 -m venv .venv
 source .venv/bin/activate
+
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
+
 python app.py
 ```
 
-Open http://127.0.0.1:7860. The first analysis downloads the required models; the first detected human face also triggers emotion-model loading. Allow several GB of disk/RAM and internet for downloads. CPU analysis may be slow.
+Then open:
 
-## Changed files
+```text
+http://127.0.0.1:7860
+```
 
-- `app.py`: preserves the original seven-output Gradio layout. Models load on first use. OpenCV detector data is resolved and checked. Only detected face crops reach the expression model; no face and model failure produce different messages. Up to five faces are shown. Image colours are preserved with BGR/RGB conversion. Scene summary uses caption/object estimates; story uses those directly rather than an invented intermediate description. A failed optional stage leaves other results visible. Hosting address and port can be set with environment variables.
-- `requirements.txt`: adds missing NumPy, YOLO, DeepFace, OpenCV and TensorFlow/Keras dependencies with bounded versions. Target Python 3.11. This is a proposed configuration, not a clean-install-verified lockfile.
-- `app_blip2_backup.py`: unchanged original backup; `requirements-backup.txt` adds its missing gTTS dependency.
-- `Dockerfile`, `.dockerignore`, `.gitignore`: persistent Python hosting configuration and exclusions for model weights, secrets and environments.
-- `tests/test_app.py`: targeted checks using mocked model inference.
+The first analysis may take extra time because the required models are downloaded and loaded on demand.
 
-The uploaded app already converted YOLO BGR to RGB and enforced face detection. The screenshots with swapped colours and animal/landscape emotion labels may therefore show a different revision. Haar face detection can still miss faces or produce false positives.
+## 📂 Main Project Files
 
-## Checks and limitations
+```text
+ai-visual-intelligence-system/
+├── app.py
+├── requirements.txt
+├── Dockerfile
+├── .dockerignore
+├── .gitignore
+├── tests/
+│   └── test_app.py
+└── README.md
+```
 
-Run `python -m unittest discover -s tests -v`.
+## 🧪 Testing
 
-Mocked checks are not proof of real caption/expression/story accuracy. Full inference, clean installation, Docker build and hosted deployment remain unverified. The required BLIP/FLAN-T5 models and OpenCV/DeepFace were not available in the earlier test environment. FLAN-T5-base may still produce short or poor stories; the revised prompt does not guarantee fluent output. Scene description is now a concise summary of model estimates instead of speculative paragraphs.
+```bash
+python -m unittest discover -s tests -v
+```
 
-Before publishing, test a parrot, a landscape, a human face, multiple faces and a low-light photo in a clean environment. Verify colours, captions and story relevance. Save a dependency lock after a successful installation.
+## 🌐 Deployment
 
-## Hosting and GitHub
+The application is deployed as a Python web service on Render.
 
-The Dockerfile targets a persistent Python service such as a Hugging Face Docker Space, using port 7860. See https://huggingface.co/docs/hub/spaces-sdks-docker.
+**Live Application:**  
+https://ai-visual-intelligence-system.onrender.com
 
-The main app starts a Gradio server; it is not configured as a Vercel serverless entry point. A separate Vercel frontend could later link to or embed the hosted app. No live backend, GitHub push or Vercel deployment was created. See https://vercel.com/changelog/vercel-functions-can-now-be-up-to-5-gb-in-package-size for current large-function support; a larger bundle limit alone does not establish compatibility.
+The app binds to `0.0.0.0` and uses the platform-provided `PORT` environment variable when deployed.
 
-Copy these source files into your existing repository after review. Keep model weights, virtual environments, generated audio and credentials out of Git. Do not overwrite unrelated files.
+## 📌 Current Model Note
 
-## Archived backup findings
+The main deployed application currently uses **Salesforce BLIP image captioning base** for caption generation together with YOLOv8, FLAN-T5, and DeepFace.
 
-The BLIP-2 backup loads a much larger model at import, lacks explicit inference-mode guards and model.eval(), does not handle TTS network errors, and leaves temporary audio files behind. Its MPS half-precision path needs hardware testing. It remains unchanged to preserve the original experiment; it is not the emotion/story entry point.
+## 👩‍💻 Author
+
+**Niyati Singh**
+
+GitHub: https://github.com/niyatisingh2809
