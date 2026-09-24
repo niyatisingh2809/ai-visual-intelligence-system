@@ -5,6 +5,7 @@ from functools import lru_cache
 from pathlib import Path
 
 import gradio as gr
+from fastapi import FastAPI
 import numpy as np
 import torch
 from PIL import Image, ImageOps
@@ -947,8 +948,17 @@ describe the scene, and create a fictional story inspired by the image.
     )
 
 
+# Enable Gradio's queue for inference events.
+demo.queue()
+
+# Vercel's Python runtime expects a top-level ASGI/WSGI application
+# named "app". Mount the Gradio UI on a FastAPI app at the site root.
+app = FastAPI(title="AI Visual Intelligence System")
+app = gr.mount_gradio_app(app, demo, path="/")
+
+
 if __name__ == "__main__":
-    demo.queue().launch(
+    demo.launch(
         share=False,
         show_error=False,
         server_name=os.getenv(
