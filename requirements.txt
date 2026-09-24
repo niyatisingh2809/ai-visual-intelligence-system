@@ -1,0 +1,13 @@
+# Python 3.11 recommended; validate in a clean environment.
+torch==2.8.0
+torchvision==0.23.0
+transformers==4.57.6
+accelerate==1.10.1
+Pillow>=10.4,<12
+gradio>=5.49.1,<6
+numpy>=1.26.4,<2
+ultralytics>=8.3,<8.4
+opencv-python>=4.10,<4.12
+deepface==0.0.95
+tensorflow>=2.18,<2.19
+tf-keras>=2.18,<2.19
