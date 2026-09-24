@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <title>AI Visual Intelligence System</title>
+  <meta name="description" content="AI-powered image analysis with object detection, scene understanding, facial-expression estimation, and creative storytelling.">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <span class="eyebrow">AI VISUAL INTELLIGENCE</span>
+      <h1>Understand an image in one click.</h1>
+      <p>Upload an image to detect visible objects, estimate the environment, analyze clear human faces, build a structured scene description, and generate a short fictional story.</p>
+    </section>
+
+    <section class="workspace">
+      <div class="panel upload-panel">
+        <div class="panel-title">
+          <div><span class="step">01</span><h2>Upload image</h2></div>
+          <span class="badge">JPG · PNG · WEBP</span>
+        </div>
+
+        <label class="dropzone" id="dropzone" for="imageInput">
+          <input id="imageInput" type="file" accept="image/*" hidden>
+          <div class="drop-icon">＋</div>
+          <strong>Choose an image</strong>
+          <span>or drag and drop here</span>
+          <small>Maximum 10 MB</small>
+        </label>
+
+        <div class="preview-wrap hidden" id="previewWrap">
+          <img id="previewImage" alt="Selected preview">
+          <button class="ghost-button" id="changeButton" type="button">Change image</button>
+        </div>
+
+        <button class="primary-button" id="analyzeButton" type="button" disabled>Analyze image</button>
+        <div class="status" id="status" aria-live="polite"></div>
+      </div>
+
+      <div class="panel result-preview-panel">
+        <div class="panel-title">
+          <div><span class="step">02</span><h2>Detection preview</h2></div>
+          <span class="live-dot"><i></i> Render API</span>
+        </div>
+
+        <div class="result-image-empty" id="resultImageEmpty">
+          <span>Detection result will appear here</span>
+        </div>
+        <img id="resultImage" class="result-image hidden" alt="Detected objects">
+      </div>
+    </section>
+
+    <section class="results hidden" id="results">
+      <article class="result-card wide">
+        <span class="card-label">Auto visual summary</span>
+        <p id="captionResult"></p>
+      </article>
+
+      <article class="result-card">
+        <span class="card-label">Objects detected</span>
+        <pre id="objectsResult"></pre>
+      </article>
+
+      <article class="result-card">
+        <span class="card-label">Facial expression estimate</span>
+        <p id="emotionResult"></p>
+      </article>
+
+      <article class="result-card">
+        <span class="card-label">Environment</span>
+        <p id="environmentResult"></p>
+      </article>
+
+      <article class="result-card wide">
+        <span class="card-label">Deep scene description</span>
+        <p id="descriptionResult"></p>
+      </article>
+
+      <article class="result-card wide">
+        <span class="card-label">Creative story</span>
+        <p id="storyResult"></p>
+      </article>
+    </section>
+
+    <footer>
+      <span>AI Visual Intelligence System</span>
+      <span>Frontend on Vercel · Backend on Render</span>
+    </footer>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
